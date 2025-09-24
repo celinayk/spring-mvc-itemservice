@@ -37,7 +37,7 @@ public class BasicItemController {
   }
 
   // 상품 등록 처리
-  @PostMapping("/add")
+  //@PostMapping("/add")
   public String addItemV1(@RequestParam String itemName,
                           @RequestParam int price,
                           @RequestParam Integer quantity,
@@ -51,7 +51,42 @@ public class BasicItemController {
     return "basic/item";
   }
 
+  /**
+   * @ModelAttribute("item") Item item -> 1. Item 객체생성(요청 파라미터 처리)
+   * model.addAttribute("item", item); 2. 자동 추가(모델에 자동으로 넣어줌)
+   */
+  //@PostMapping("/add")
+  public String addItemV2(@ModelAttribute("item") Item item,
+                          Model model) {
+    //Item item = new Item();
+    //item.setItemName(itemName);
+    //item.setPrice(price);
+    //item.setQuantity(quantity);
+    itemRepository.save(item);
+    //model.addAttribute("item", item); 자동추가, 생략가능
+    return "basic/item";
+  }
 
+  /**
+   * @ModelAttribute name 생략 가능
+   * model.addAttribute(item); 자동 추가, 생략 가능
+   * 생략시 model에 저장되는 name은 클래스명 첫글자만 소문자로 등록 Item -> item
+   */
+  @PostMapping("/add")
+  public String addItemV3(@ModelAttribute Item item) {
+    itemRepository.save(item);
+    return "basic/item";
+  }
+
+  /**
+   * @ModelAttribute 자체 생략 가능
+   * model.addAttribute(item) 자동 추가
+   */
+  @PostMapping("/add")
+  public String addItemV4(Item item) {
+    itemRepository.save(item);
+    return "basic/item";
+  }
 
 
   /**
@@ -62,6 +97,12 @@ public class BasicItemController {
     itemRepository.save(new Item("testA", 10000, 10));
     itemRepository.save(new Item("testB", 20000, 20));
   }
-
-
 }
+
+
+
+
+
+
+
+
